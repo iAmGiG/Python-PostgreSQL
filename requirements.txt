@@ -1,0 +1,2 @@
+psycopg2-binary==2.9.3
+lxml==4.6.3
