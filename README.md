@@ -4,7 +4,7 @@ This project uses a PostgreSQL database adapter to create a relation and populat
 
 # Python and PostgreSQL
 
-A detailed set up guild.
+A detailed set up guild. ping from the VM
 
 ## Description
 
