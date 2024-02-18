@@ -4,7 +4,7 @@ This project uses a PostgreSQL database adapter to create a relation and populat
 
 # Python and PostgreSQL
 
-A detailed set up guild. ping from the VM
+A detailed set up guild. ping from the VM.
 
 ## Description
 
@@ -86,6 +86,31 @@ This project uses a PostgreSQL database adapter to create a relation and populat
 ### Configuration
 
 Before running the application, ensure your PostgreSQL server is running and accessible. You will need to configure your database connection details (e.g., database name, user, password, host, and port) in the application.
+
+Update the README:
+Add a section in your README that specifies how to download and prepare the PubMed data files for processing. Here's an example snippet you might add:
+
+markdown
+Copy code
+## PubMed Data Preparation
+
+The project uses PubMed citation XML files for data processing. To download a specific file:
+
+1. Create a data directory within the project:
+```bash
+mkdir -p data
+```
+
+2. Download the desired PubMed XML file to the data directory:
+```bash
+wget https://ftp.ncbi.nlm.nih.gov/pubmed/baseline/pubmed24n1158.xml.gz -P ./data
+```
+
+3. If necessary, unzip the file for processing:
+```bash
+gunzip ./data/pubmed24n1158.xml.gz -k
+```
+(-k option used to keep OG zip file)
 
 ### Usage
 

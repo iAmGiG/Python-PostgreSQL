@@ -190,4 +190,6 @@ Thumbs.db
 #personal files:
 personal_notes.txt
 dev_scripts/
+/data/
+wget-log*
 
