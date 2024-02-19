@@ -5,14 +5,16 @@ import psycopg2.extras
 
 # Define database connection parameters (replace placeholders with your actual details)
 db_params = {
-    "database": "your_database",
-    "user": "your_username",
-    "password": "your_password",
+    "database": "mydb",
+    "user": "myuser",
+    "password": "mypassword",
     "host": "localhost",
     "port": "5432"
 }
 
 # Function to connect to the database
+
+
 def connect_db(params):
     try:
         conn = psycopg2.connect(**params)
@@ -23,6 +25,8 @@ def connect_db(params):
         return None
 
 # Function to create table (replace with your actual table schema)
+
+
 def create_table(conn):
     cursor = conn.cursor()
     table_create_query = """
@@ -40,6 +44,8 @@ def create_table(conn):
     cursor.close()
 
 # Function to insert data into the table
+
+
 def insert_data(conn, data):
     cursor = conn.cursor()
     insert_query = """
@@ -52,6 +58,8 @@ def insert_data(conn, data):
     cursor.close()
 
 # Main function to process the XML file and insert data into the database
+
+
 def main(xml_gz_file_name):
     pubmed_file = gzip.open(xml_gz_file_name, 'r')
     byte_string = pubmed_file.read()
@@ -77,6 +85,7 @@ def main(xml_gz_file_name):
         print("Data insertion completed")
 
         conn.close()
+
 
 if __name__ == "__main__":
     main("your_pubmed_file.xml.gz")
