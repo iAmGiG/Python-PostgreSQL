@@ -74,6 +74,30 @@ def insert_data(conn, data):
     cursor.close()
 
 
+def parse_and_prepare_data(xml_root):
+    """
+    Parses XML data and prepares it for insertion into the database.
+
+    :param xml_root: The root of the parsed XML document.
+    :return: A list of tuples with the data to be inserted.
+    """
+    data = []
+    for PubmedArticle in xml_root.findall('.//PubmedArticle'):
+        pmid = PubmedArticle.find('.//PMID').text
+        article_title = PubmedArticle.find('.//Article/ArticleTitle').text
+        first_author = PubmedArticle.find(
+            './/Article/AuthorList/Author/LastName').text  # Adjust path as needed
+        publisher = PubmedArticle.find(
+            './/Journal/Title').text  # Adjust path as needed
+        published_date = PubmedArticle.find(
+            './/ArticleDate/Year').text  # Adjust path as needed
+        uploader = 'Your Name'  # Replace with your name or a variable
+        # Adjust the fields and paths according to your XML structure and requirements
+        data.append((pmid, article_title, first_author,
+                    publisher, published_date, uploader))
+    return data
+
+
 def main(xml_gz_file_name):
     """
     Main function to process the XML file and insert data into the database.
@@ -81,8 +105,10 @@ def main(xml_gz_file_name):
     :param xml_gz_file_name: str
         The file name of the PubMed XML GZ file to be processed. 
     """
-    pubmed_file = gzip.open(xml_gz_file_name, 'r')
-    byte_string = pubmed_file.read()
+    # Open the gzip file
+    with gzip.open(xml_gz_file_name, 'r') as pubmed_file:
+        byte_string = pubmed_file.read()
+
     content = byte_string.decode("utf-8")
     root = ET.fromstring(content)
 
@@ -92,14 +118,7 @@ def main(xml_gz_file_name):
         create_table(conn)
 
         # Prepare data for insertion
-        data = []
-        for PubmedArticle in root.findall('.//PubmedArticle'):
-            pmid = PubmedArticle.find('.//PMID').text
-            article_title = PubmedArticle.find('.//ArticleTitle').text
-            publication_date = PubmedArticle.find('.//PubDate/Year').text
-            abstract = PubmedArticle.find('.//Abstract/AbstractText').text
-            # Add more fields as necessary
-            data.append((pmid, article_title, publication_date, abstract))
+        data = parse_and_prepare_data(root)
 
         insert_data(conn, data)
         print("Data insertion completed")
