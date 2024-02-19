@@ -125,11 +125,30 @@ Run the provided Python script to parse the downloaded XML file and insert citat
 - Step 3: Data Analysis
 Execute the SQL queries included in the repository to analyze the citation data. The queries cover a range of analyses, such as finding the range of publication dates, identifying the most prolific authors, and more.
 
+## Running the Main Script
+
+Ensure Python and necessary libraries are installed. Navigate to the project directory and run:
+
+```bash
+python main.py
+```
+
 ### Running 'main.py'
 
-- Ensure you have Python and necessary libraries (psycopg2, lxml, etc.)installed.
+- Ensure you have Python and necessary libraries (psycopg2, lxml, etc.) installed.
 - Use the terminal or command prompt to navigate to your project directory.
 - Run the script with python main.py, assuming it's configured to connect to your database and process an XML file.
+
+### Using `analysis.py`
+
+```markdown
+## Analysis Script Usage
+
+After setting up the database with `main.py`, you can run analysis queries:
+
+```bash
+python analysis.py
+```
 
 ### Using 'analysis.py'
 
@@ -141,6 +160,18 @@ Execute the SQL queries included in the repository to analyze the citation data.
 - This feature allows you to create interactive Python sessions in VSCode. By placing # %% at the start of a cell, you can execute that section independently in an interactive window.
 - Ensure you have the Python extension for VSCode installed, which includes Pylance.
 - You can write your analysis code in segments separated by # %% and run each block independently, making it easier to develop and test parts of your code.
+
+
+### Unit Testing with `test_analysis.py`
+
+```markdown
+## Unit Testing
+
+Ensure you have a test database setup. Run the unit tests to verify the functionality:
+
+```bash
+python -m unittest test_analysis.py
+```
 
 #### Acknowledgments
 
