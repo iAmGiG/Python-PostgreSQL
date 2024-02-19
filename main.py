@@ -91,7 +91,7 @@ def parse_and_prepare_data(xml_root):
             './/Journal/Title').text   
         published_date = PubmedArticle.find(
             './/ArticleDate/Year').text   
-        uploader = 'Your Name'   
+        uploader = 'Mr.Uploader'   
         data.append((pmid, article_title, first_author,
                     publisher, published_date, uploader))
     return data
