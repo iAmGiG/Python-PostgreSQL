@@ -3,7 +3,8 @@ import xml.etree.ElementTree as ET
 import psycopg2
 import psycopg2.extras
 
-# Define database connection parameters (replace placeholders with your actual details)
+# Define database connection parameters (the default is the PostgreSQL localhost,
+# so we'll use this here as we will just use a VM to run the solution.)
 db_params = {
     "database": "mydb",
     "user": "myuser",
@@ -12,10 +13,14 @@ db_params = {
     "port": "5432"
 }
 
-# Function to connect to the database
-
 
 def connect_db(params):
+    """
+    Function to establish a connection to the database.
+
+    :param params: dict
+        A dictionary containing database connection parameters such as database, user, password, host, and port.
+    """
     try:
         conn = psycopg2.connect(**params)
         print("Database connection established")
@@ -24,18 +29,23 @@ def connect_db(params):
         print("Database connection error:", e)
         return None
 
-# Function to create table (replace with your actual table schema)
-
 
 def create_table(conn):
+    """
+    Function to create the table in the database.
+
+    :param conn: psycopg2.extensions.connection
+        The connection object to the PostgreSQL database.
+    """
     cursor = conn.cursor()
     table_create_query = """
     CREATE TABLE IF NOT EXISTS pubmed_articles (
-        pmid VARCHAR PRIMARY KEY,
-        article_title TEXT,
+        pmid NUMERIC(8) PRIMARY KEY,
+        article_title VARCHAR(255),
+        first_author VARCHAR(63),
+        publisher VARCHAR(127),
         publication_date DATE,
-        abstract TEXT
-        -- Add more fields as needed
+        uploader VARCHAR(127)
     );
     """
     cursor.execute(table_create_query)
@@ -43,24 +53,34 @@ def create_table(conn):
     print("Table created successfully")
     cursor.close()
 
-# Function to insert data into the table
-
 
 def insert_data(conn, data):
+    """
+    Function to insert data into the table.
+
+    :param conn: psycopg2.extensions.connection
+        The connection object to the PostgreSQL database.
+    :param data: list of tuples
+        A list of tuples, where each tuple contains data for one row to be inserted.
+    """
     cursor = conn.cursor()
     insert_query = """
-    INSERT INTO pubmed_articles (pmid, article_title, publication_date, abstract)
-    VALUES (%s, %s, %s, %s)
+    INSERT INTO pubmed_articles (pmid, article_title, first_author, publisher, published_date, uploader)
+    VALUES (%s, %s, %s, %s, %s, %s)
     ON CONFLICT (pmid) DO NOTHING;
     """
     psycopg2.extras.execute_batch(cursor, insert_query, data)
     conn.commit()
     cursor.close()
 
-# Main function to process the XML file and insert data into the database
-
 
 def main(xml_gz_file_name):
+    """
+    Main function to process the XML file and insert data into the database.
+
+    :param xml_gz_file_name: str
+        The file name of the PubMed XML GZ file to be processed. 
+    """
     pubmed_file = gzip.open(xml_gz_file_name, 'r')
     byte_string = pubmed_file.read()
     content = byte_string.decode("utf-8")
@@ -88,4 +108,4 @@ def main(xml_gz_file_name):
 
 
 if __name__ == "__main__":
-    main("your_pubmed_file.xml.gz")
+    main("data/pubmed24n1158.xml")
