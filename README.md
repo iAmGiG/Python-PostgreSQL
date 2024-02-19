@@ -90,26 +90,28 @@ Before running the application, ensure your PostgreSQL server is running and acc
 Update the README:
 Add a section in your README that specifies how to download and prepare the PubMed data files for processing. Here's an example snippet you might add:
 
-markdown
-Copy code
 ## PubMed Data Preparation
 
 The project uses PubMed citation XML files for data processing. To download a specific file:
 
 1. Create a data directory within the project:
+
 ```bash
 mkdir -p data
 ```
 
 2. Download the desired PubMed XML file to the data directory:
+
 ```bash
 wget https://ftp.ncbi.nlm.nih.gov/pubmed/baseline/pubmed24n1158.xml.gz -P ./data
 ```
 
 3. If necessary, unzip the file for processing:
+
 ```bash
 gunzip ./data/pubmed24n1158.xml.gz -k
 ```
+
 (-k option used to keep OG zip file)
 
 ### Usage
@@ -122,6 +124,23 @@ Run the provided Python script to parse the downloaded XML file and insert citat
 
 - Step 3: Data Analysis
 Execute the SQL queries included in the repository to analyze the citation data. The queries cover a range of analyses, such as finding the range of publication dates, identifying the most prolific authors, and more.
+
+### Running 'main.py'
+
+- Ensure you have Python and necessary libraries (psycopg2, lxml, etc.)installed.
+- Use the terminal or command prompt to navigate to your project directory.
+- Run the script with python main.py, assuming it's configured to connect to your database and process an XML file.
+
+### Using 'analysis.py'
+
+- Same prerequisites as main.py.
+- Run specific analysis functions directly by calling them in the script and then executing python analysis.py.
+
+### VSCode Pylance/Jupyter # %% Commenting
+
+- This feature allows you to create interactive Python sessions in VSCode. By placing # %% at the start of a cell, you can execute that section independently in an interactive window.
+- Ensure you have the Python extension for VSCode installed, which includes Pylance.
+- You can write your analysis code in segments separated by # %% and run each block independently, making it easier to develop and test parts of your code.
 
 #### Acknowledgments
 
