@@ -86,13 +86,12 @@ def parse_and_prepare_data(xml_root):
         pmid = PubmedArticle.find('.//PMID').text
         article_title = PubmedArticle.find('.//Article/ArticleTitle').text
         first_author = PubmedArticle.find(
-            './/Article/AuthorList/Author/LastName').text  # Adjust path as needed
+            './/Article/AuthorList/Author/LastName').text   
         publisher = PubmedArticle.find(
-            './/Journal/Title').text  # Adjust path as needed
+            './/Journal/Title').text   
         published_date = PubmedArticle.find(
-            './/ArticleDate/Year').text  # Adjust path as needed
-        uploader = 'Your Name'  # Replace with your name or a variable
-        # Adjust the fields and paths according to your XML structure and requirements
+            './/ArticleDate/Year').text   
+        uploader = 'Your Name'   
         data.append((pmid, article_title, first_author,
                     publisher, published_date, uploader))
     return data
