@@ -95,7 +95,7 @@ def get_articles_with_most_keywords(conn):
     """
     query = """
     SELECT article_title, COUNT(keyword) AS keyword_count
-    FROM pubmed_articles_keywords
+    FROM pubmed_articles
     GROUP BY article_title
     ORDER BY keyword_count DESC
     LIMIT 5;
