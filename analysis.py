@@ -36,9 +36,8 @@ def get_date_range(conn):
     with conn.cursor() as cursor:
         cursor.execute(query)
         result = cursor.fetchone()
-        print(f"{'Date From':<20} | {'Date To':<20}")
-        print(f"{'-'*20}+{'-'*20}")
-        print(f"{result[0]:<20} | {result[1]:<20}")
+        print(
+            f"Date From  |  Date To\n{'-' * 11}+{'-' * 11}\n{result[0]}  |  {result[1]}")
 
 # %%
 # Q2
@@ -90,7 +89,8 @@ def get_citations_by_top_authors(conn, authors):
             cursor.execute(query, (author,))
             print(f"Citations by {author}:")
             for row in cursor.fetchall():
-                truncated_title = (row[0][:100] + '...') if len(row[0]) > 100 else row[0]
+                truncated_title = (
+                    row[0][:100] + '...') if len(row[0]) > 100 else row[0]
                 print(f"Title: {truncated_title}, Date: {row[1]}")
             print("\n")
 # %%
