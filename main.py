@@ -101,14 +101,19 @@ def parse_and_prepare_data(xml_root):
         first check if the PubDate element and its child elements (Year, Month, Day) exist.
         If the Year is not present, it defaults the entire published_date to 'None'.
         If Year is present but Month or Day are missing, it defaults them to '01' to ensure a valid date format.
+        Additionally: ensure that there are checks for None at each step of accessing child elements, 
+        which prevents trying to access .text on a NoneType object.
         '''
         pub_date_element = PubmedArticle.find('.//PubDate')
-        year = pub_date_element.find(
-            'Year').text if pub_date_element is not None else 'None'
-        month = pub_date_element.find('Month').text if pub_date_element is not None and pub_date_element.find(
-            'Month') is not None else '01'
-        day = pub_date_element.find('Day').text if pub_date_element is not None and pub_date_element.find(
-            'Day') is not None else '01'
+        year_element = pub_date_element.find(
+            'Year') if pub_date_element is not None else None
+        year = year_element.text if year_element is not None else 'None'
+        month_element = pub_date_element.find(
+            'Month') if pub_date_element is not None else None
+        month = month_element.text if month_element is not None else '01'
+        day_element = pub_date_element.find(
+            'Day') if pub_date_element is not None else None
+        day = day_element.text if day_element is not None else '01'
         published_date = f"{year}-{month}-{day}" if year != 'None' else 'None'
 
         uploader = 'Mr.Uploader'
