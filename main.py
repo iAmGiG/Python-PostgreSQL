@@ -1,4 +1,5 @@
 import gzip
+import os
 import xml.etree.ElementTree as ET
 import psycopg2
 import psycopg2.extras
@@ -100,16 +101,20 @@ def parse_and_prepare_data(xml_root):
     return data
 
 
-def main(xml_gz_file_name):
+def main(file_name):
     """
     Main function to process the XML file and insert data into the database.
-
+    Can handle .gz or the raw xml files types.
     :param xml_gz_file_name: str
         The file name of the PubMed XML GZ file to be processed. 
     """
     # Open the gzip file
-    with gzip.open(xml_gz_file_name, 'r') as pubmed_file:
-        byte_string = pubmed_file.read()
+    if file_name.endswith('.gz'):
+        with gzip.open(file_name, 'r') as file:
+            byte_string = file.read()
+    else:
+        with open(file_name, 'r') as file:
+            byte_string = file.read().encode('utf-8')
 
     content = byte_string.decode("utf-8")
     root = ET.fromstring(content)
@@ -129,4 +134,4 @@ def main(xml_gz_file_name):
 
 
 if __name__ == "__main__":
-    main("data/pubmed24n1158.xml")
+    main("data/pubmed24n1158.xml.gz")
