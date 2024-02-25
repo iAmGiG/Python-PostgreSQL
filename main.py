@@ -37,6 +37,7 @@ def create_table(conn):
     :param conn: psycopg2.extensions.connection
         The connection object to the PostgreSQL database.
     """
+    print("Starting to create table (not not already present)")
     cursor = conn.cursor()
     table_create_query = """
     CREATE TABLE IF NOT EXISTS pubmed_articles (
@@ -63,6 +64,7 @@ def insert_data(conn, data):
     :param data: list of tuples
         A list of tuples, where each tuple contains data for one row to be inserted.
     """
+    print("Begining to insert data.")
     cursor = conn.cursor()
     insert_query = """
     INSERT INTO pubmed_articles (pmid, article_title, first_author, publisher, published_date, uploader)
@@ -71,6 +73,7 @@ def insert_data(conn, data):
     """
     psycopg2.extras.execute_batch(cursor, insert_query, data)
     conn.commit()
+    print("Finishing insert data.")
     cursor.close()
 
 
@@ -83,6 +86,7 @@ def parse_and_prepare_data(xml_root):
     :param xml_root: The root of the parsed XML document.
     :return: A list of tuples with the data to be inserted.
     """
+    print("Begining parase and prep data.")
     data = []
     for PubmedArticle in xml_root.findall('.//PubmedArticle'):
         pmid = PubmedArticle.find('.//PMID').text
@@ -92,11 +96,25 @@ def parse_and_prepare_data(xml_root):
         first_author = first_author_element.text if first_author_element is not None else 'None'
         publisher_element = PubmedArticle.find('.//Journal/Title')
         publisher = publisher_element.text if publisher_element is not None else 'None'
-        published_date_element = PubmedArticle.find('.//ArticleDate/Year')
-        published_date = published_date_element.text if published_date_element is not None else 'None'
-        uploader = 'Mr.Uploader'  # Assuming uploader is always known and not null
+
+        '''To construct the published_date.
+        first check if the PubDate element and its child elements (Year, Month, Day) exist.
+        If the Year is not present, it defaults the entire published_date to 'None'.
+        If Year is present but Month or Day are missing, it defaults them to '01' to ensure a valid date format.
+        '''
+        pub_date_element = PubmedArticle.find('.//PubDate')
+        year = pub_date_element.find(
+            'Year').text if pub_date_element is not None else 'None'
+        month = pub_date_element.find('Month').text if pub_date_element is not None and pub_date_element.find(
+            'Month') is not None else '01'
+        day = pub_date_element.find('Day').text if pub_date_element is not None and pub_date_element.find(
+            'Day') is not None else '01'
+        published_date = f"{year}-{month}-{day}" if year != 'None' else 'None'
+
+        uploader = 'Mr.Uploader'
         data.append((pmid, article_title, first_author,
                     publisher, published_date, uploader))
+    print("Ending parase and prep data.")
     return data
 
 
