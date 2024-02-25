@@ -36,9 +36,7 @@ def get_date_range(conn):
     with conn.cursor() as cursor:
         cursor.execute(query)
         result = cursor.fetchone()
-        print(f"{'Date From':<20} | {'Date To':<20}")
-        print(f"{'-'*20}+{'-'*20}")
-        print(f"{result[0]:<20} | {result[1]:<20}")
+        print(f"Date From | Date To\n{result[0]} | {result[1]}")
 
 # %%
 # Q2
@@ -57,14 +55,9 @@ def get_top_authors(conn):
     with conn.cursor() as cursor:
         cursor.execute(query)
         results = cursor.fetchall()
-        max_name_length = max(len(row[0])
-                              for row in results) if results else 10
-        header_format = f"{{:<{max_name_length}}} | {{:}}\n"
-        row_format = f"{{:<{max_name_length}}} | {{}}\n"
-        print(header_format.format("First Author", "Count"))
-        print('-' * max_name_length + '-+-' + '-' * 5)
+        print("First Author | cnt")
         for row in results:
-            print(row_format.format(row[0], row[1]))
+            print(f"{row[0]} | {row[1]}")
             authors.append(row[0])
     return authors
 
@@ -90,11 +83,29 @@ def get_citations_by_top_authors(conn, authors):
             cursor.execute(query, (author,))
             print(f"Citations by {author}:")
             for row in cursor.fetchall():
-                truncated_title = (row[0][:100] + '...') if len(row[0]) > 100 else row[0]
-                print(f"Title: {truncated_title}, Date: {row[1]}")
+                print(f"Title: {row[0]}, Date: {row[1]}")
             print("\n")
 # %%
 # Q4
+
+
+def get_articles_with_most_keywords(conn):
+    """
+    Finds articles with the most keywords associated.
+    -------Unfortunatly we never made the keywords column and processing feature in main.---------
+    """
+    query = """
+    SELECT article_title, COUNT(keyword) AS keyword_count
+    FROM pubmed_articles
+    GROUP BY article_title
+    ORDER BY keyword_count DESC
+    LIMIT 5;
+    """
+    with conn.cursor() as cursor:
+        cursor.execute(query)
+        print("Articles with the Most Keywords:")
+        for row in cursor.fetchall():
+            print(f"Title: {row[0]}, Keywords: {row[1]}")
 
 
 def get_avg_publications_per_author_per_year(conn):
@@ -112,12 +123,10 @@ def get_avg_publications_per_author_per_year(conn):
     """
     with conn.cursor() as cursor:
         cursor.execute(query)
-        print(f"{'Author':<20} | {'Year':<10} | {'Avg. Publications':<20}")
-        print(f"{'-'*20}+{'-'*10}+{'-'*20}")
+        print("Average Publications per Author per Year:")
         for row in cursor.fetchall():
-            # Handle the COALESCE default value
-            year = str(row[1]) if row[1] != 0 else 'Unknown'
-            print(f"{row[0]:<20} | {year:<10} | {row[2]:<20.2f}")
+            year = int(row[1]) if row[1] != 0 else 'Unknown'  # Handle the COALESCE default value
+            print(f"Author: {row[0]}, Year: {year}, Avg. Publications: {row[2]:.2f}")
 
 
 # %%
@@ -137,6 +146,7 @@ if __name__ == "__main__":
         get_citations_by_top_authors(conn, authors=retrieved_top_authors)
         print("\n------\n")
         # Q4
+        # get_articles_with_most_keywords(conn) --- We never got to make the keywords process in main, scope creep.
         print("Print get average publications per authors per year:\n")
         get_avg_publications_per_author_per_year(conn)
         print("\n------\n")
