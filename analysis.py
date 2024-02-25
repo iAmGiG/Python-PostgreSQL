@@ -51,12 +51,15 @@ def get_top_authors(conn):
     ORDER BY cnt DESC
     LIMIT 5;
     """
+    authors = []
     with conn.cursor() as cursor:
         cursor.execute(query)
         results = cursor.fetchall()
         print("First Author | cnt")
         for row in results:
             print(f"{row[0]} | {row[1]}")
+            authors.append(row[0])
+    return authors
 
 # %%
 # Q3
@@ -129,9 +132,9 @@ if __name__ == "__main__":
         # Q1
         get_date_range(conn)
         # Q2
-        get_top_authors(conn)
+        retrieved_top_authors = get_top_authors(conn)
         # Q3
-        get_citations_by_top_authors(conn)
+        get_citations_by_top_authors(conn, authors=retrieved_top_authors)
         # Q4
         get_articles_with_most_keywords(conn)
         get_avg_publications_per_author_per_year(conn)
