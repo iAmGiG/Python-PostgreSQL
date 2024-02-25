@@ -118,7 +118,7 @@ def parse_and_prepare_data(xml_root):
         day_element = pub_date_element.find(
             'Day') if pub_date_element is not None else None
         day = day_element.text if day_element is not None else '01'
-        published_date = f"{year}-{month}-{day}" if year != 'None' else 'None'
+        published_date = f"{year}-{month}-{day}" if year != 'None' else None
 
         uploader = 'Mr.Uploader'
         data.append((pmid, article_title, first_author,
