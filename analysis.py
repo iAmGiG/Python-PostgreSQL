@@ -92,6 +92,7 @@ def get_citations_by_top_authors(conn, authors):
 def get_articles_with_most_keywords(conn):
     """
     Finds articles with the most keywords associated.
+    -------Unfortunatly we never made the keywords column and processing feature in main.---------
     """
     query = """
     SELECT article_title, COUNT(keyword) AS keyword_count
@@ -130,12 +131,20 @@ if __name__ == "__main__":
     conn = connect_db(db_params)
     if conn:
         # Q1
+        print("Print get date range:\n")
         get_date_range(conn)
+        print("\n------\n")
         # Q2
+        print("Print get top authors:\n")
         retrieved_top_authors = get_top_authors(conn)
+        print("\n------\n")
         # Q3
+        print("Print get citaitons by top authors:\n")
         get_citations_by_top_authors(conn, authors=retrieved_top_authors)
+        print("\n------\n")
         # Q4
-        get_articles_with_most_keywords(conn)
+        # get_articles_with_most_keywords(conn) --- We never got to make the keywords process in main, scope creep.
+        print("Print get average publications per authors per year:\n")
         get_avg_publications_per_author_per_year(conn)
+        print("\n------\n")
         conn.close()
