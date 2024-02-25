@@ -33,11 +33,11 @@ def connect_db(params):
 def create_table(conn):
     """
     Function to create the table in the database.
-
+    The 'IF NOT EXISTS' in the query will prevent recreation of the table.
     :param conn: psycopg2.extensions.connection
         The connection object to the PostgreSQL database.
     """
-    print("Starting to create table (not not already present)")
+    print("Starting to create table.")
     cursor = conn.cursor()
     table_create_query = """
     CREATE TABLE IF NOT EXISTS pubmed_articles (
@@ -45,7 +45,7 @@ def create_table(conn):
         article_title VARCHAR(255),
         first_author VARCHAR(63),
         publisher VARCHAR(127),
-        publication_date DATE,
+        published_date DATE,
         uploader VARCHAR(127)
     );
     """
