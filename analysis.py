@@ -110,11 +110,14 @@ def get_articles_with_most_keywords(conn):
 
 def get_avg_publications_per_author_per_year(conn):
     """
-    Calculates the average number of publications for each author annually.
+    Calculates the average number of publications for each author annually,
+    excluding entries with NULL published_date.
     """
     query = """
-    SELECT first_author, EXTRACT(YEAR FROM published_date) AS year, COUNT(*)::float / COUNT(DISTINCT first_author) AS avg_publications
+    SELECT first_author, COALESCE(EXTRACT(YEAR FROM published_date), 0) AS year, 
+           COUNT(*)::float / COUNT(DISTINCT first_author) AS avg_publications
     FROM pubmed_articles
+    WHERE published_date IS NOT NULL
     GROUP BY first_author, year
     ORDER BY first_author, year;
     """
@@ -122,8 +125,8 @@ def get_avg_publications_per_author_per_year(conn):
         cursor.execute(query)
         print("Average Publications per Author per Year:")
         for row in cursor.fetchall():
-            print(
-                f"Author: {row[0]}, Year: {int(row[1])}, Avg. Publications: {row[2]:.2f}")
+            year = int(row[1]) if row[1] != 0 else 'Unknown'  # Handle the COALESCE default value
+            print(f"Author: {row[0]}, Year: {year}, Avg. Publications: {row[2]:.2f}")
 
 
 # %%
