@@ -90,7 +90,8 @@ def parse_and_prepare_data(xml_root):
     data = []
     for PubmedArticle in xml_root.findall('.//PubmedArticle'):
         pmid = PubmedArticle.find('.//PMID').text
-        article_title = PubmedArticle.find('.//Article/ArticleTitle').text
+        # Be sure to either have a large article title char array, but in this case we'll truncate the tile.
+        article_title = PubmedArticle.find('.//Article/ArticleTitle').text[:255]
         first_author_element = PubmedArticle.find(
             './/Article/AuthorList/Author/LastName')
         first_author = first_author_element.text if first_author_element is not None else 'None'
