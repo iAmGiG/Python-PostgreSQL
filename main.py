@@ -77,7 +77,9 @@ def insert_data(conn, data):
 def parse_and_prepare_data(xml_root):
     """
     Parses XML data and prepares it for insertion into the database.
-
+    Checks for missing first authors, publishers, and publication dates within PubMed articles. 
+    Each element is validated for existence before attempting to extract text;
+    if not found, 'None' is assigned.
     :param xml_root: The root of the parsed XML document.
     :return: A list of tuples with the data to be inserted.
     """
@@ -85,13 +87,14 @@ def parse_and_prepare_data(xml_root):
     for PubmedArticle in xml_root.findall('.//PubmedArticle'):
         pmid = PubmedArticle.find('.//PMID').text
         article_title = PubmedArticle.find('.//Article/ArticleTitle').text
-        first_author = PubmedArticle.find(
-            './/Article/AuthorList/Author/LastName').text   
-        publisher = PubmedArticle.find(
-            './/Journal/Title').text   
-        published_date = PubmedArticle.find(
-            './/ArticleDate/Year').text   
-        uploader = 'Mr.Uploader'   
+        first_author_element = PubmedArticle.find(
+            './/Article/AuthorList/Author/LastName')
+        first_author = first_author_element.text if first_author_element is not None else 'None'
+        publisher_element = PubmedArticle.find('.//Journal/Title')
+        publisher = publisher_element.text if publisher_element is not None else 'None'
+        published_date_element = PubmedArticle.find('.//ArticleDate/Year')
+        published_date = published_date_element.text if published_date_element is not None else 'None'
+        uploader = 'Mr.Uploader'  # Assuming uploader is always known and not null
         data.append((pmid, article_title, first_author,
                     publisher, published_date, uploader))
     return data
