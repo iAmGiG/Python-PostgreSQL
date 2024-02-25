@@ -92,12 +92,14 @@ def parse_and_prepare_data(xml_root):
         pmid = PubmedArticle.find('.//PMID').text
         # Be sure to either have a large article title char array, but in this case we'll truncate the tile.
         article_title_element = PubmedArticle.find('.//Article/ArticleTitle')
-        article_title = article_title_element.text[:255] if article_title_element is not None and article_title_element.text is not None else 'None'
+        article_title = article_title_element.text[
+            :255] if article_title_element is not None and article_title_element.text is not None else 'None'
         first_author_element = PubmedArticle.find(
             './/Article/AuthorList/Author/LastName')
-        first_author = first_author_element.text if first_author_element is not None else 'None'
+        first_author = first_author_element.text[
+            :63] if first_author_element is not None and first_author_element.text is not None else 'None'
         publisher_element = PubmedArticle.find('.//Journal/Title')
-        publisher = publisher_element.text if publisher_element is not None else 'None'
+        publisher = publisher_element.text[:127] if publisher_element is not None and publisher_element.text is not None else 'None'
 
         '''To construct the published_date.
         first check if the PubDate element and its child elements (Year, Month, Day) exist.
