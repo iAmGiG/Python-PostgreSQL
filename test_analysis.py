@@ -36,9 +36,6 @@ class TestAnalysis(unittest.TestCase):
         authors=get_top_authors(self.conn)
         get_citations_by_top_authors(self.conn, authors)
 
-    # def test_get_articles_with_most_keywords(self):
-    #     get_articles_with_most_keywords(self.conn)
-
     def test_get_avg_publications_per_author_per_year(self):
         get_avg_publications_per_author_per_year(self.conn)
 

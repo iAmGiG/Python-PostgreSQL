@@ -73,7 +73,7 @@ def get_top_authors(conn):
 
 def get_citations_by_top_authors(conn, authors):
     """
-    Print all citations published by the authors identified in Q2.
+    Print all citations published by the authors identified during Q2 get top authors.
 
     :param conn: The database connection object.
     :param authors: A list of author names identified as the most prolific.
@@ -119,7 +119,6 @@ def get_avg_publications_per_author_per_year(conn):
         print(f"{'Author':<20} | {'Year':<10} | {'Avg. Publications':<20}")
         print(f"{'-'*20}+{'-'*10}+{'-'*20}")
         for row in cursor.fetchall():
-            # Handle the COALESCE default value
             year = str(row[1]) if row[1] != 0 else 'Unknown'
             print(f"{row[0]:<20} | {year:<10} | {row[2]:<20.2f}")
 
