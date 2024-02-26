@@ -80,18 +80,23 @@ def get_citations_by_top_authors(conn, authors):
     """
     for author in authors:
         query = """
-        SELECT article_title, published_date
-        FROM pubmed_articles
-        WHERE first_author = %s
-        ORDER BY published_date;
-        """
+            SELECT pmid, first_author, article_title, publisher, published_date
+            FROM pubmed_articles
+            WHERE first_author = %s
+            ORDER BY published_date;
+            """
         with conn.cursor() as cursor:
             cursor.execute(query, (author,))
             print(f"Citations by {author}:")
+            print(
+                f"{'PMID':<10} | {'Author':<20} | {'Title':<50} | {'Publisher':<30} | {'Date':<10}")
+            print('-'*130)
             for row in cursor.fetchall():
-                truncated_title = (
-                    row[0][:100] + '...') if len(row[0]) > 100 else row[0]
-                print(f"Title: {truncated_title}, Date: {row[1]}")
+                # Truncate the title to 8-10 words
+                truncated_title = ' '.join(
+                    row[2].split()[:8]) + ('...' if len(row[2].split()) > 8 else '')
+                print(
+                    f"{row[0]:<10} | {row[1]:<20} | {truncated_title:<50} | {row[3]:<30} | {row[4]}")
             print("\n")
 # %%
 # Q4
