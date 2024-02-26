@@ -89,14 +89,13 @@ def get_citations_by_top_authors(conn, authors):
             cursor.execute(query, (author,))
             print(f"Citations by {author}:")
             print(
-                f"{'PMID':<10} | {'Author':<20} | {'Title':<50} | {'Publisher':<30} | {'Date':<10}")
+                f"{'PMID':<10} | {'Author':<20} | {'Title':<50} | {'Publisher':<30} ")
             print('-'*130)
             for row in cursor.fetchall():
-                # Truncate the title to 8-10 words
                 truncated_title = ' '.join(
                     row[2].split()[:8]) + ('...' if len(row[2].split()) > 8 else '')
                 print(
-                    f"{row[0]:<10} | {row[1]:<20} | {truncated_title:<50} | {row[3]:<30} | {row[4]}")
+                    f"{row[0]:<10} | {row[1]:<20} | {truncated_title:<50} | {row[3]:<30} ")
             print("\n")
 # %%
 # Q4
