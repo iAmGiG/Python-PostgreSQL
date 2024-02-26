@@ -95,7 +95,7 @@ def get_citations_by_top_authors(conn, authors):
                 truncated_title = ' '.join(
                     row[2].split()[:8]) + ('...' if len(row[2].split()) > 8 else '')
                 print(
-                    f"{row[0]:<10} | {row[1]:<20} | {truncated_title:<50} | {row[3]:<30} ")
+                    f"{row[0]:<10} | {row[1]:<10} | {truncated_title:<20} | {row[3]:<30} ")
             print("\n")
 # %%
 # Q4
