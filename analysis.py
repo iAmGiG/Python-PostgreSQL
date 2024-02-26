@@ -83,7 +83,8 @@ def get_citations_by_top_authors(conn, authors):
             SELECT pmid, first_author, article_title, publisher, published_date
             FROM pubmed_articles
             WHERE first_author = %s
-            ORDER BY published_date;
+            ORDER BY published_date 
+            LIMIT 20;
             """
         with conn.cursor() as cursor:
             cursor.execute(query, (author,))
@@ -112,7 +113,8 @@ def get_avg_publications_per_author_per_year(conn):
     FROM pubmed_articles
     WHERE published_date IS NOT NULL
     GROUP BY first_author, year
-    ORDER BY first_author, year;
+    ORDER BY first_author, year ASC
+    LIMIT 10;
     """
     with conn.cursor() as cursor:
         cursor.execute(query)
