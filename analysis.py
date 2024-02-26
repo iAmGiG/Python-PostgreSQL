@@ -113,7 +113,7 @@ def get_avg_publications_per_author_per_year(conn):
     FROM pubmed_articles
     WHERE published_date IS NOT NULL
     GROUP BY first_author, year
-    ORDER BY first_author ASC
+    ORDER BY avg_publications DESC, first_author ASC
     LIMIT 10;
     """
     with conn.cursor() as cursor:
